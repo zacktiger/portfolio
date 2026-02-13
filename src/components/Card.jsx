@@ -14,7 +14,7 @@ export default function Card({ children, className = '', glowColor = 'cyan', del
         : isP ? 'hover:border-pastel-purple/50' : 'hover:border-pastel-cyan/50'
 
     // Slightly stronger card bg for readability
-    const bgClass = isDark ? 'bg-dark-card/95' : 'bg-light-card/95'
+    const bgClass = isDark ? 'bg-dark-card/98' : 'bg-light-card/98'
 
     const glowClass = isDark
         ? isP ? 'hover:shadow-glow-pink' : 'hover:shadow-glow-cyan'
@@ -42,7 +42,7 @@ export default function Card({ children, className = '', glowColor = 'cyan', del
                 transition-all duration-300 ease-out
                 before:absolute before:top-0 before:left-[10%] before:right-[10%] before:h-px
                 ${topAccent}
-                p-8 sm:p-10
+                p-7 sm:p-10 lg:p-12
                 ${className}
             `}
         >

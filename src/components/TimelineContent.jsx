@@ -91,15 +91,15 @@ function BioCard() {
     const { isDark } = useTheme()
     return (
         <Card glowColor="cyan">
-            <h3 className={`font-heading text-lg font-semibold tracking-wider mb-4 ${isDark ? 'text-neon-cyan' : 'text-pastel-cyan'}`}>
+            <h3 className={`font-heading text-xl font-semibold tracking-wider mb-5 ${isDark ? 'text-neon-cyan' : 'text-pastel-cyan'}`}>
                 WHO I AM
             </h3>
-            <p className={`font-body leading-relaxed mb-4 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+            <p className={`font-body text-base leading-[1.85] mb-5 ${isDark ? 'text-gray-100' : 'text-gray-700'}`}>
                 I'm a passionate Software Development Engineer specializing in Backend and Full Stack development.
                 Currently pursuing my B.Tech in Internet of Things at IIIT Nagpur, I love building robust,
                 scalable applications and solving complex problems.
             </p>
-            <p className={`font-body leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+            <p className={`font-body text-base leading-[1.85] ${isDark ? 'text-gray-200' : 'text-gray-600'}`}>
                 From winning game jams to building full-stack applications,
                 I thrive on turning ideas into functional, elegant software.
             </p>
@@ -111,7 +111,7 @@ function EducationCard() {
     const { isDark } = useTheme()
     return (
         <Card glowColor="pink">
-            <h3 className={`font-heading text-lg font-semibold tracking-wider mb-6 ${isDark ? 'text-neon-pink' : 'text-pastel-purple'}`}>
+            <h3 className={`font-heading text-xl font-semibold tracking-wider mb-6 ${isDark ? 'text-neon-pink' : 'text-pastel-purple'}`}>
                 EDUCATION
             </h3>
             <div className="flex items-start gap-4">
@@ -119,13 +119,13 @@ function EducationCard() {
                     <GraduationCap size={24} className={isDark ? 'text-neon-pink' : 'text-pastel-purple'} />
                 </div>
                 <div>
-                    <h4 className={`font-display font-semibold text-lg ${isDark ? 'text-white' : 'text-gray-800'}`}>IIIT Nagpur</h4>
-                    <p className={`font-body ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>B.Tech in Internet of Things (IoT)</p>
+                    <h4 className={`font-display font-semibold text-lg sm:text-xl ${isDark ? 'text-white' : 'text-gray-800'}`}>IIIT Nagpur</h4>
+                    <p className={`font-body text-base ${isDark ? 'text-gray-100' : 'text-gray-700'}`}>B.Tech in Internet of Things (IoT)</p>
                     <div className="flex flex-wrap items-center gap-4 mt-3">
-                        <span className={`flex items-center gap-1.5 text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        <span className={`flex items-center gap-1.5 text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
                             <MapPin size={14} /> Nagpur, Maharashtra
                         </span>
-                        <span className={`flex items-center gap-1.5 text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        <span className={`flex items-center gap-1.5 text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
                             <Calendar size={14} /> 2023 – 2027
                         </span>
                     </div>
@@ -137,7 +137,7 @@ function EducationCard() {
                     <Trophy size={18} className={isDark ? 'text-neon-cyan' : 'text-pastel-cyan'} />
                     <span className={`font-display font-semibold text-sm ${isDark ? 'text-neon-cyan' : 'text-pastel-cyan'}`}>ACHIEVEMENTS</span>
                 </div>
-                <ul className={`space-y-2 text-sm ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                <ul className={`space-y-2.5 text-sm sm:text-base ${isDark ? 'text-gray-100' : 'text-gray-700'}`}>
                     <li className="flex items-start gap-2">
                         <span className={isDark ? 'text-neon-pink' : 'text-pastel-purple'}>▸</span>
                         Winner (1st Place) — Technex GameJam 2024, IIT BHU
@@ -169,7 +169,7 @@ function SkillCategoryCard({ category }) {
                         : isP ? 'text-pastel-purple' : 'text-pastel-cyan'
                     } />
                 </div>
-                <h3 className={`font-heading text-sm font-semibold tracking-widest uppercase ${isDark
+                <h3 className={`font-heading text-base font-semibold tracking-widest uppercase ${isDark
                     ? isP ? 'text-neon-pink' : 'text-neon-cyan'
                     : isP ? 'text-pastel-purple' : 'text-pastel-cyan'
                     }`}>
@@ -179,21 +179,21 @@ function SkillCategoryCard({ category }) {
 
             {category.skills.map(skill => (
                 <div key={skill.name} className="mb-4 last:mb-0">
-                    <h4 className={`font-display font-semibold text-sm tracking-wide mb-1 ${isDark ? 'text-gray-100' : 'text-gray-800'}`}>
+                    <h4 className={`font-display font-semibold text-base tracking-wide mb-1.5 ${isDark ? 'text-white' : 'text-gray-800'}`}>
                         {skill.name}
                     </h4>
-                    <div className="flex flex-wrap gap-1.5 mb-1.5">
+                    <div className="flex flex-wrap gap-2 mb-2">
                         {skill.tags.map(tag => (
-                            <span key={tag} className={`text-[10px] font-display tracking-wider px-2 py-0.5 rounded-full ${isDark
-                                ? isP ? 'bg-neon-pink/8 text-neon-pink/60 border border-neon-pink/10' : 'bg-neon-cyan/8 text-neon-cyan/60 border border-neon-cyan/10'
-                                : isP ? 'bg-pastel-purple/8 text-pastel-purple/70 border border-pastel-purple/15' : 'bg-pastel-cyan/8 text-pastel-cyan/70 border border-pastel-cyan/15'
+                            <span key={tag} className={`text-[11px] font-display tracking-wider px-2.5 py-1 rounded-full ${isDark
+                                ? isP ? 'bg-neon-pink/10 text-neon-pink/70 border border-neon-pink/15' : 'bg-neon-cyan/10 text-neon-cyan/70 border border-neon-cyan/15'
+                                : isP ? 'bg-pastel-purple/10 text-pastel-purple/80 border border-pastel-purple/20' : 'bg-pastel-cyan/10 text-pastel-cyan/80 border border-pastel-cyan/20'
                                 }`}>
                                 {tag}
                             </span>
                         ))}
                     </div>
-                    <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        <span className={isDark ? (isP ? 'text-neon-pink/40' : 'text-neon-cyan/40') : (isP ? 'text-pastel-purple/50' : 'text-pastel-cyan/50')}>
+                    <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+                        <span className={isDark ? (isP ? 'text-neon-pink/50' : 'text-neon-cyan/50') : (isP ? 'text-pastel-purple/60' : 'text-pastel-cyan/60')}>
                             Used in:&nbsp;
                         </span>
                         {skill.usedIn}
@@ -269,10 +269,10 @@ function ProjectsCard() {
                                     <Icon size={18} />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <h3 className={`font-display font-semibold text-base ${isDark ? 'text-gray-100' : 'text-gray-800'}`}>
+                                    <h3 className={`font-display font-semibold text-base sm:text-lg ${isDark ? 'text-white' : 'text-gray-800'}`}>
                                         {project.title}
                                     </h3>
-                                    <p className={`text-xs tracking-wider mt-0.5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                                    <p className={`text-sm tracking-wider mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                                         {project.date} — {project.subtitle}
                                     </p>
                                 </div>
@@ -309,12 +309,12 @@ function ProjectsCard() {
                                                     ? isP ? '#e879f9' : '#22d3ee'
                                                     : isP ? '#b48ad8' : '#6ec6c0',
                                             }}>
-                                            <p className={`text-sm leading-relaxed mb-3 ${isDark ? 'text-gray-200' : 'text-gray-600'}`}>
+                                            <p className={`text-sm sm:text-base leading-relaxed mb-4 ${isDark ? 'text-gray-100' : 'text-gray-600'}`}>
                                                 {project.description}
                                             </p>
-                                            <ul className={`space-y-2 mb-4 ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+                                            <ul className={`space-y-2.5 mb-5 ${isDark ? 'text-gray-200' : 'text-gray-500'}`}>
                                                 {project.bullets.map((b, bi) => (
-                                                    <li key={bi} className="flex items-start gap-2 text-sm">
+                                                    <li key={bi} className="flex items-start gap-2 text-sm sm:text-base">
                                                         <span className={`mt-1 ${isDark ? (isP ? 'text-neon-pink/70' : 'text-neon-cyan/70') : (isP ? 'text-pastel-purple/80' : 'text-pastel-cyan/80')}`}>▸</span>
                                                         {b}
                                                     </li>
@@ -354,7 +354,7 @@ function ContactCard() {
     return (
         <Card glowColor="cyan">
             <div className="text-center mb-8">
-                <p className={`font-display text-lg ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                <p className={`font-display text-lg sm:text-xl ${isDark ? 'text-gray-100' : 'text-gray-700'}`}>
                     Interested in working together? Reach out!
                 </p>
             </div>
@@ -376,8 +376,8 @@ function ContactCard() {
                                 <Icon size={18} className={isDark ? 'text-neon-cyan' : 'text-pastel-cyan'} />
                             </div>
                             <div>
-                                <p className={`text-xs font-display tracking-widest uppercase ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>{info.label}</p>
-                                <p className={`font-display text-sm ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>{info.value}</p>
+                                <p className={`text-xs font-display tracking-widest uppercase ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{info.label}</p>
+                                <p className={`font-display text-sm sm:text-base ${isDark ? 'text-gray-100' : 'text-gray-800'}`}>{info.value}</p>
                             </div>
                         </a>
                     )
