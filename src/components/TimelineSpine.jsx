@@ -14,6 +14,25 @@ export default function TimelineSpine({ items = [] }) {
     const spineRef = useRef(null)
     const [fillHeight, setFillHeight] = useState(0)
 
+    // Group items by navbar sections (header + following cards)
+    // so each section can occupy an alternating column.
+    const sectionGroups = []
+    let currentGroup = null
+
+    items.forEach((item) => {
+        if (item.type === 'header') {
+            if (currentGroup) sectionGroups.push(currentGroup)
+            currentGroup = { header: item, cards: [] }
+            return
+        }
+
+        if (item.type === 'card' && currentGroup) {
+            currentGroup.cards.push(item)
+        }
+    })
+
+    if (currentGroup) sectionGroups.push(currentGroup)
+
     // Scroll-driven fill
     useEffect(() => {
         const handleScroll = () => {
@@ -52,19 +71,18 @@ export default function TimelineSpine({ items = [] }) {
                 />
             </div>
 
-            <div className="max-w-4xl mx-auto relative">
-                {items.map((item, i) => {
-                    // ── Section header — full width, centered ──
-                    if (item.type === 'header') {
-                        return (
+            <div className="max-w-6xl mx-auto relative">
+                {sectionGroups.map((group, groupIndex) => {
+                    const placeLeft = groupIndex % 2 === 0
+
+                    const sectionBlock = (
+                        <div id={group.header.sectionId || undefined} className="w-full">
                             <motion.div
-                                key={`header-${i}`}
-                                id={item.sectionId || undefined}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: '-60px' }}
                                 transition={{ duration: 0.5 }}
-                                className={`relative text-center pb-10 sm:pb-12 lg:pb-14 ${i === 0 ? 'pt-4 sm:pt-6' : 'pt-16 sm:pt-20 lg:pt-24'}`}
+                                className={`relative text-center pb-8 sm:pb-10 ${groupIndex === 0 ? 'pt-4 sm:pt-6' : 'pt-10 sm:pt-12'}`}
                             >
                                 <h2
                                     className={`
@@ -72,37 +90,51 @@ export default function TimelineSpine({ items = [] }) {
                                         ${isDark ? 'gradient-text neon-text-cyan' : 'gradient-text-light'}
                                     `}
                                 >
-                                    {item.label}
+                                    {group.header.label}
                                 </h2>
-                                {item.subtitle && (
+                                {group.header.subtitle && (
                                     <p className={`font-display text-base sm:text-lg tracking-wide ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                                        {item.subtitle}
+                                        {group.header.subtitle}
                                     </p>
                                 )}
                             </motion.div>
-                        )
-                    }
 
-                    // ── Card — single aligned column ──
+                            {group.cards.map((cardItem, cardIndex) => (
+                                <motion.div
+                                    key={`group-${groupIndex}-card-${cardIndex}`}
+                                    initial={{ opacity: 0, y: 35, filter: 'blur(5px)' }}
+                                    whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                                    viewport={{ once: true, margin: '-60px' }}
+                                    transition={{
+                                        duration: 0.65,
+                                        delay: 0.1 + cardIndex * 0.05,
+                                        ease: [0.22, 1, 0.36, 1],
+                                    }}
+                                    className="relative mb-8 sm:mb-10"
+                                >
+                                    {cardItem.content}
+                                </motion.div>
+                            ))}
+                        </div>
+                    )
 
                     return (
-                        <motion.div
-                            key={`card-${i}`}
-                            initial={{ opacity: 0, y: 35, filter: 'blur(5px)' }}
-                            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                            viewport={{ once: true, margin: '-60px' }}
-                            transition={{
-                                duration: 0.65,
-                                delay: 0.1,
-                                ease: [0.22, 1, 0.36, 1],
-                            }}
-                            className={`
-                                relative mb-8 sm:mb-10 lg:mb-12
-                                w-full max-w-3xl mx-auto
-                            `}
+                        <div
+                            key={`section-group-${groupIndex}`}
+                            className={`grid lg:grid-cols-2 gap-8 lg:gap-12 ${groupIndex === 0 ? '' : 'mt-2 lg:mt-6'}`}
                         >
-                            {item.content}
-                        </motion.div>
+                            {placeLeft ? (
+                                <>
+                                    <div>{sectionBlock}</div>
+                                    <div className="hidden lg:block" aria-hidden="true" />
+                                </>
+                            ) : (
+                                <>
+                                    <div className="hidden lg:block" aria-hidden="true" />
+                                    <div>{sectionBlock}</div>
+                                </>
+                            )}
+                        </div>
                     )
                 })}
             </div>
