@@ -4,6 +4,7 @@ import Hero from './components/Hero'
 import TimelineContent from './components/TimelineContent'
 import Footer from './components/Footer'
 import CustomCursor from './components/CustomCursor'
+import BackgroundMusic from './components/BackgroundMusic'
 
 function AppContent() {
     const { isDark } = useTheme()
@@ -23,6 +24,7 @@ function AppContent() {
                     <TimelineContent />
                 </main>
                 <Footer />
+                <BackgroundMusic />
             </div>
         </div>
     )
