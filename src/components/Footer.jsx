@@ -19,14 +19,16 @@ export default function Footer() {
     return (
         <footer
             className={`
-                relative px-6 pt-16 pb-8
+                relative overflow-visible px-6 pt-16 pb-8
                 ${isDark ? 'bg-[#040410]' : 'bg-[#e8e4f0]'}
             `}
-            style={{ marginTop: '140px' }}
+            style={{ marginTop: '128px' }}
         >
-            {/* Top divider — wider glow */}
-            <div className={`absolute top-0 left-0 right-0 h-px ${isDark ? 'bg-gradient-to-r from-transparent via-neon-cyan/20 to-transparent' : 'bg-gradient-to-r from-transparent via-pastel-cyan/30 to-transparent'}`} />
+            {/* Background extension above footer to match lifted divider */}
+            <div className={`absolute -top-[12px] left-0 right-0 h-[12px] ${isDark ? 'bg-[#040410]' : 'bg-[#e8e4f0]'}`} />
 
+            {/* Top divider — wider glow */}
+            <div className={`absolute -top-[12px] left-0 right-0 h-px ${isDark ? 'bg-gradient-to-r from-transparent via-neon-cyan/20 to-transparent' : 'bg-gradient-to-r from-transparent via-pastel-cyan/30 to-transparent'}`} />
             <div className="max-w-6xl mx-auto">
                 {/* Main footer content */}
                 <div className="grid sm:grid-cols-3 gap-10 mb-12">
@@ -119,3 +121,4 @@ export default function Footer() {
         </footer>
     )
 }
+

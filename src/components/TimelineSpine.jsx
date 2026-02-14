@@ -58,15 +58,15 @@ export default function TimelineSpine({ items = [] }) {
             >
                 <div className={`absolute inset-0 ${isDark ? 'bg-white/[0.04]' : 'bg-black/[0.05]'}`} />
                 <div
-                    className="absolute top-0 left-0 right-0 transition-all duration-300 ease-out"
+                    className="absolute top-0 left-0 right-0 transition-all duration-800 ease-out"
                     style={{
                         height: `${fillHeight}%`,
                         background: isDark
-                            ? 'linear-gradient(to bottom, rgba(34,211,238,0.2), rgba(232,121,249,0.2))'
+                            ? 'linear-gradient(to bottom, rgba(34,211,238,0.4), rgba(232,121,249,0.35))'
                             : 'linear-gradient(to bottom, rgba(110,198,192,0.3), rgba(180,138,216,0.3))',
                         boxShadow: isDark
-                            ? '0 0 10px rgba(34,211,238,0.15), 0 0 25px rgba(34,211,238,0.05)'
-                            : '0 0 10px rgba(110,198,192,0.2)',
+                            ? '0 0 10px rgba(34,211,238,0.35), 0 0 25px rgba(34,211,238,0.18)'
+                            : '0 0 10px rgba(110,198,192,0.3)',
                     }}
                 />
             </div>
@@ -112,7 +112,7 @@ export default function TimelineSpine({ items = [] }) {
                                         delay: 0.1 + cardIndex * 0.05,
                                         ease: [0.22, 1, 0.36, 1],
                                     }}
-                                    className="relative mb-8 sm:mb-10"
+                                    className="relative mb-16 sm:mb-20"
                                 >
                                     {cardItem.content}
                                 </motion.div>
