@@ -10,8 +10,8 @@ export default function Footer() {
     ]
 
     const socialItems = [
-        { icon: Github, label: 'GitHub', href: 'https://github.com/KshitijBachhav' },
-        { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/KshitijBachhav' },
+        { icon: Github, label: 'GitHub', href: 'https://github.com/zacktiger' },
+        { icon: Linkedin, label: 'LinkedIn', href: 'www.linkedin.com/in/kshitij-bachhav-789a59213' },
     ]
 
     const quickLinks = ['Home', 'About', 'Projects', 'Skills', 'Contact']

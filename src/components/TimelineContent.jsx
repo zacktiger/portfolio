@@ -347,8 +347,8 @@ function ContactCard() {
     const contactInfo = [
         { icon: Mail, label: 'Email', value: 'kshitijbachhav005@gmail.com', href: 'mailto:kshitijbachhav005@gmail.com' },
         { icon: Phone, label: 'Phone', value: '+91-9322391752', href: 'tel:+919322391752' },
-        { icon: Linkedin, label: 'LinkedIn', value: 'KshitijBachhav', href: 'https://linkedin.com/in/KshitijBachhav' },
-        { icon: Github, label: 'GitHub', value: 'KshitijBachhav', href: 'https://github.com/KshitijBachhav' },
+        { icon: Linkedin, label: 'LinkedIn', value: 'KshitijBachhav', href: 'www.linkedin.com/in/kshitij-bachhav-789a59213' },
+        { icon: Github, label: 'GitHub', value: 'KshitijBachhav', href: 'https://github.com/zacktiger' },
     ]
 
     return (

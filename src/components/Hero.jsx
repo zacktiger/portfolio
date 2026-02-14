@@ -89,8 +89,8 @@ export default function Hero() {
                         className="flex items-center justify-center gap-6"
                     >
                         {[
-                            { icon: Github, href: 'https://github.com/KshitijBachhav', label: 'GitHub' },
-                            { icon: Linkedin, href: 'https://linkedin.com/in/KshitijBachhav', label: 'LinkedIn' },
+                            { icon: Github, href: 'https://github.com/zacktiger', label: 'GitHub' },
+                            { icon: Linkedin, href: 'www.linkedin.com/in/kshitij-bachhav-789a59213', label: 'LinkedIn' },
                             { icon: Mail, href: 'mailto:kshitijbachhav005@gmail.com', label: 'Email' },
                         ].map(({ icon: Icon, href, label }, i) => (
                             <motion.a

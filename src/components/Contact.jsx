@@ -24,13 +24,13 @@ export default function Contact() {
             icon: Linkedin,
             label: 'LinkedIn',
             value: 'KshitijBachhav',
-            href: 'https://linkedin.com/in/KshitijBachhav',
+            href: 'www.linkedin.com/in/kshitij-bachhav-789a59213',
         },
         {
             icon: Github,
             label: 'GitHub',
             value: 'KshitijBachhav',
-            href: 'https://github.com/KshitijBachhav',
+            href: 'https://github.com/zacktiger',
         },
     ]
 

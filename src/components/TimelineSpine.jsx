@@ -74,6 +74,8 @@ export default function TimelineSpine({ items = [] }) {
             <div className="max-w-6xl mx-auto relative">
                 {sectionGroups.map((group, groupIndex) => {
                     const placeLeft = groupIndex % 2 === 0
+                    const isShiftedRightSection =
+                        group.header.sectionId === 'skills' || group.header.sectionId === 'contact'
 
                     const sectionBlock = (
                         <div id={group.header.sectionId || undefined} className="w-full">
@@ -131,7 +133,7 @@ export default function TimelineSpine({ items = [] }) {
                             ) : (
                                 <>
                                     <div className="hidden lg:block" aria-hidden="true" />
-                                    <div>{sectionBlock}</div>
+                                    <div className={isShiftedRightSection ? 'timeline-right-shift' : ''}>{sectionBlock}</div>
                                 </>
                             )}
                         </div>

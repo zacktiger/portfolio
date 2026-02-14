@@ -377,6 +377,16 @@ body.sidebar-open {
 body.screen-shake {
   animation: shake 80ms ease-in-out;
 }
+@media (min-width: 1024px) {
+  .timeline-right-shift {
+    /* Keep cards offset from the center spine */
+    padding-left: clamp(10rem, 12vw, 14rem);
+    /* Grow width only to the right (away from center) */
+    width: calc(111% + clamp(6rem, 9vw, 10rem));
+    max-width: none;
+  }
+}
+
 
 /* ═══════════════════════════════════════════
    PROJECT HIT FLASH
