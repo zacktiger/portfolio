@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from 'react'
+import { useRef, useEffect, useCallback, useState } from 'react'
 import { useTheme } from '../context/ThemeContext'
 
 // ─── Low-poly car shape (simple trapezoid + wheels) ───
@@ -87,19 +87,52 @@ function drawObstacleCar(ctx, x, y, w, h, color) {
     ctx.restore()
 }
 
-export default function RetroCarGame() {
+export default function RetroCarGame({ onPlayStart, onGameStateChange }) {
     const canvasRef = useRef(null)
     const { isDark } = useTheme()
+    const [isGameRunning, setIsGameRunning] = useState(false)
+    const [isIntroVisible, setIsIntroVisible] = useState(true)
+    const [isIntroFading, setIsIntroFading] = useState(false)
+    const [hud, setHud] = useState({ distance: 0, blocksShot: 0 })
     const keysRef = useRef({ left: false, right: false })
     const gameRef = useRef({
         carX: 0.5,  // 0..1 normalized position
         speed: 2,
         roadOffset: 0,
+        distance: 0,
+        blocksShot: 0,
+        hudTick: 0,
         obstacles: [],
         stars: [],
         buildings: [],
         initialized: false,
     })
+
+    const handlePlay = () => {
+        onPlayStart?.()
+        onGameStateChange?.(true)
+        setIsIntroFading(true)
+        window.setTimeout(() => {
+            setIsIntroVisible(false)
+            setIsGameRunning(true)
+        }, 350)
+    }
+
+    const handleToggleGame = () => {
+        setIsGameRunning((prevRunning) => {
+            const nextRunning = !prevRunning
+            onGameStateChange?.(nextRunning)
+            return nextRunning
+        })
+    }
+
+    const pauseGame = useCallback(() => {
+        setIsGameRunning((prevRunning) => {
+            if (!prevRunning) return prevRunning
+            onGameStateChange?.(false)
+            return false
+        })
+    }, [onGameStateChange])
 
     // Initialize stars and buildings once
     const initScene = useCallback((w) => {
@@ -148,9 +181,16 @@ export default function RetroCarGame() {
         const canvas = canvasRef.current
         if (!canvas) return
         const ctx = canvas.getContext('2d')
-        let animId
+        let animId = null
 
         const handleKeyDown = (e) => {
+            if (e.code === 'Space') {
+                if (isGameRunning) {
+                    e.preventDefault()
+                    pauseGame()
+                }
+                return
+            }
             if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keysRef.current.left = true
             if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keysRef.current.right = true
         }
@@ -184,22 +224,36 @@ export default function RetroCarGame() {
             const h = canvas.height / (window.devicePixelRatio || 1)
             const g = gameRef.current
 
-            // Update car position
-            if (keysRef.current.left) g.carX = Math.max(0.15, g.carX - 1.2 * dt)
-            if (keysRef.current.right) g.carX = Math.min(0.85, g.carX + 1.2 * dt)
+            if (isGameRunning) {
+                // Update car position
+                if (keysRef.current.left) g.carX = Math.max(0.15, g.carX - 1.2 * dt)
+                if (keysRef.current.right) g.carX = Math.min(0.85, g.carX + 1.2 * dt)
 
-            g.roadOffset += g.speed * dt
-            if (g.roadOffset > 1) g.roadOffset -= 1
+                g.roadOffset += g.speed * dt
+                if (g.roadOffset > 1) g.roadOffset -= 1
 
-            // Update obstacles
-            g.obstacles.forEach(obs => {
-                obs.z += g.speed * dt * 0.3
-                if (obs.z > 1.1) {
-                    obs.z = -0.1
-                    obs.lane = Math.random() * 0.5 + 0.25
-                    obs.color = ['#e879f9', '#22d3ee', '#f97316', '#a855f7'][Math.floor(Math.random() * 4)]
+                g.distance += g.speed * dt * 22
+
+                // Update obstacles
+                g.obstacles.forEach(obs => {
+                    obs.z += g.speed * dt * 0.3
+                    if (obs.z > 1.1) {
+                        obs.z = -0.1
+                        obs.lane = Math.random() * 0.5 + 0.25
+                        obs.color = ['#e879f9', '#22d3ee', '#f97316', '#a855f7'][Math.floor(Math.random() * 4)]
+                        g.blocksShot += 1
+                    }
+                })
+
+                g.hudTick += dt
+                if (g.hudTick > 0.1) {
+                    g.hudTick = 0
+                    setHud({
+                        distance: Math.floor(g.distance),
+                        blocksShot: g.blocksShot,
+                    })
                 }
-            })
+            }
 
             // ─── DRAW ───
             ctx.clearRect(0, 0, w, h)
@@ -385,24 +439,94 @@ export default function RetroCarGame() {
             ctx.textAlign = 'center'
             ctx.fillText('← A/D or Arrow Keys to drive →', w / 2, h - 8)
 
-            animId = requestAnimationFrame(loop)
+            if (isGameRunning) {
+                animId = requestAnimationFrame(loop)
+            }
         }
 
-        animId = requestAnimationFrame(loop)
+        if (isGameRunning) {
+            animId = requestAnimationFrame(loop)
+        } else {
+            loop(0)
+        }
 
         return () => {
-            cancelAnimationFrame(animId)
+            if (animId) cancelAnimationFrame(animId)
             window.removeEventListener('keydown', handleKeyDown)
             window.removeEventListener('keyup', handleKeyUp)
             window.removeEventListener('resize', resize)
         }
-    }, [isDark, initScene])
+    }, [isDark, initScene, isGameRunning, pauseGame])
+
+    useEffect(() => {
+        const handleScrollPause = () => {
+            if (!isGameRunning) return
+            const heroSection = canvasRef.current?.closest('section')
+            if (!heroSection) return
+
+            const heroBottom = heroSection.offsetTop + heroSection.offsetHeight
+            if (window.scrollY >= heroBottom - 1) {
+                pauseGame()
+            }
+        }
+
+        window.addEventListener('scroll', handleScrollPause, { passive: true })
+        handleScrollPause()
+
+        return () => {
+            window.removeEventListener('scroll', handleScrollPause)
+        }
+    }, [isGameRunning, pauseGame])
 
     return (
-        <canvas
-            ref={canvasRef}
-            className="absolute inset-0 w-full h-full"
-            style={{ zIndex: 0 }}
-        />
+        <>
+            <canvas
+                ref={canvasRef}
+                className="absolute inset-0 w-full h-full"
+                style={{ zIndex: 0 }}
+            />
+
+            {!isIntroVisible && (
+                <button
+                    type="button"
+                    onClick={handleToggleGame}
+                    className={`absolute right-4 top-8 z-20 rounded-lg border px-3 py-1.5 text-xs font-semibold tracking-wide backdrop-blur-md transition-colors ${isDark
+                        ? 'border-white/20 bg-black/35 text-white hover:bg-black/55'
+                        : 'border-slate-300/80 bg-white/50 text-slate-800 hover:bg-white/70'
+                        }`}
+                >
+                    {isGameRunning ? 'Pause game' : 'Resume game'}
+                </button>
+            )}
+
+            {isIntroVisible && (
+                <div
+                    className={`absolute inset-x-0 top-[calc(50%+10rem)] z-20 flex justify-center px-6 transition-opacity duration-500 pointer-events-none md:top-[calc(50%+11rem)] ${isIntroFading ? 'opacity-0' : 'opacity-100'}`}
+                >
+                    <div
+                        className={`w-full max-w-xs rounded-xl border p-4 text-center backdrop-blur-lg pointer-events-auto ${isDark ? 'border-white/20 bg-slate-900/45 text-white' : 'border-white/50 bg-white/40 text-slate-900'}`}
+                    >
+                        <p className="text-[10px] tracking-[0.2em] uppercase opacity-80">Mini Car Game</p>
+                        <h3 className="mt-1.5 text-lg font-semibold">Ready to Drive?</h3>
+                        <p className="mt-1.5 text-xs opacity-80">Hit play to start the loop and race through the neon highway.</p>
+                        <button
+                            type="button"
+                            onClick={handlePlay}
+                            className={`mt-4 inline-flex items-center rounded-lg px-4 py-2 text-xs font-semibold transition-all ${isDark ? 'bg-neon-cyan/90 text-slate-900 hover:bg-neon-cyan' : 'bg-pastel-cyan text-slate-900 hover:bg-cyan-300'}`}
+                        >
+                            ▶ Play
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            <div
+                className={`absolute left-4 top-8 z-10 rounded-xl px-4 py-2 text-sm backdrop-blur-md transition-opacity duration-300 ${isGameRunning ? 'opacity-100' : 'opacity-0 pointer-events-none'} ${isDark ? 'bg-black/35 text-white' : 'bg-white/45 text-slate-800'}`}
+            >
+                <div className="font-semibold tracking-wide"></div>
+                <div className="mt-1">Distance: <span className="font-bold">{hud.distance} m</span></div>
+                <div>Blocks shot: <span className="font-bold">{hud.blocksShot}</span></div>
+            </div>
+        </>
     )
 }

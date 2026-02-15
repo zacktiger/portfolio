@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronDown, Github, Linkedin, Mail } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
@@ -6,6 +7,7 @@ import RetroCarGame from './RetroCarGame'
 
 export default function Hero() {
     const { isDark } = useTheme()
+    const [isHeroCardHidden, setIsHeroCardHidden] = useState(false)
 
     return (
         <section
@@ -15,7 +17,10 @@ export default function Hero() {
             `}
         >
             {/* Car game background */}
-            <RetroCarGame />
+            <RetroCarGame
+                onPlayStart={() => setIsHeroCardHidden(true)}
+                onGameStateChange={setIsHeroCardHidden}
+            />
 
             {/* Subtle vignette overlay */}
             <div
@@ -29,7 +34,15 @@ export default function Hero() {
             />
 
             <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-                <Card className="p-8 sm:p-12 md:p-16 bg-dark-bg/60 backdrop-blur-lg" hover={false}>
+                <motion.div
+                    initial={false}
+                    animate={isHeroCardHidden
+                        ? { opacity: 0, y: -20, scale: 0.97 }
+                        : { opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.45, ease: 'easeInOut' }}
+                    className={isHeroCardHidden ? 'pointer-events-none' : ''}
+                >
+                    <Card className="p-8 sm:p-12 md:p-16 bg-dark-bg/60 backdrop-blur-lg" hover={false}>
                     {/* Greeting */}
                     <motion.p
                         initial={{ opacity: 0, y: 30 }}
@@ -114,7 +127,8 @@ export default function Hero() {
                             </motion.a>
                         ))}
                     </motion.div>
-                </Card>
+                    </Card>
+                </motion.div>
 
                 {/* Scroll indicator */}
                 <motion.div
